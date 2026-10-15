@@ -1,0 +1,271 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Panel de la Biblioteca</title>
+<meta name="robots" content="noindex,nofollow">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=Public+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="estilo.css">
+<style>
+/* Layout: escritorio de trabajo — índice de láminas a la izquierda, ficha de edición con vista previa a la derecha */
+body{font-size:15px}
+.top{display:flex;flex-wrap:wrap;gap:10px 20px;align-items:baseline;justify-content:space-between;margin-bottom:22px}
+h1{font-family:var(--display);font-weight:600;font-size:clamp(26px,4.5vw,36px);margin:4px 0 0}
+.box{background:var(--sheet);border:1px solid var(--rule);border-radius:10px;min-width:0}
+.pad{padding:18px}
+.head{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px 16px;border-bottom:1px solid var(--rule);font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+label,.lbl{display:block;font-size:13px;font-weight:600;margin-bottom:5px}
+input,textarea,select{width:100%;font:inherit;color:var(--ink);background:var(--bg);border:1px solid var(--rule);border-radius:7px;padding:9px 11px}
+textarea{min-height:80px;resize:vertical}
+input:focus,textarea:focus,select:focus{outline:none;border-color:var(--accent)}
+.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.msg{font-size:14px;color:var(--muted)}
+.msg.err{color:var(--bad)}
+.login{max-width:440px;margin:40px auto}
+.sitio{display:grid;grid-template-columns:1fr 2fr auto;gap:12px;align-items:end;margin-bottom:22px}
+@media (max-width:760px){.sitio{grid-template-columns:1fr}}
+.layout{display:grid;grid-template-columns:300px 1fr;gap:22px;align-items:start}
+@media (max-width:860px){.layout{grid-template-columns:1fr}}
+.list{list-style:none;margin:0;padding:8px;display:flex;flex-direction:column;gap:4px;max-height:70vh;overflow:auto}
+.item{display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:center;padding:7px;border-radius:8px;border:1px solid transparent;cursor:pointer}
+.item:hover{border-color:var(--rule)}
+.item[aria-current="true"]{border-color:var(--accent);background:var(--bg)}
+.item .t{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:500}
+.item small{display:block;font-size:12px;color:var(--muted);font-weight:400}
+.arrows{display:flex;flex-direction:column;gap:2px}
+.arrows button{font-size:10px;line-height:1;padding:3px 6px;background:var(--bg);color:var(--muted);border:1px solid var(--rule);border-radius:4px;cursor:pointer}
+.arrows button:hover{color:var(--ink)}
+.nuevo{margin:8px;width:calc(100% - 16px);justify-content:center}
+.form{display:grid;grid-template-columns:1fr 300px;gap:24px}
+@media (max-width:1060px){.form{grid-template-columns:1fr}}
+.fields{display:flex;flex-direction:column;gap:14px;min-width:0}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media (max-width:480px){.two{grid-template-columns:1fr}}
+.pick{display:flex;flex-wrap:wrap;gap:6px}
+.pick button{background:var(--bg);border:1.5px solid var(--rule);border-radius:9px;padding:4px;cursor:pointer;color:var(--ink);font:inherit;font-size:12px}
+.pick button[aria-pressed="true"]{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent)}
+.sw{display:block;width:30px;height:30px;border-radius:6px;background:var(--c)}
+.pick .esc{display:flex;flex-direction:column;gap:4px;align-items:center;padding:5px 8px}
+.pick .esc svg{width:96px;height:48px;border-radius:5px}
+.del.sure{background:var(--bad);border-color:var(--bad);color:var(--on-accent)}
+.prev .cover{aspect-ratio:2/1;border-bottom:1px solid var(--rule)}
+.prev .body{padding:14px;display:flex;flex-direction:column;gap:8px}
+.prev .meta{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--muted)}
+.prev h3{font-family:var(--display);font-weight:600;font-size:20px;margin:0}
+.prev p{margin:0;font-size:14px;color:var(--muted)}
+</style>
+</head>
+<body>
+<main class="wrap">
+  <div class="top">
+    <div><div class="eyebrow">Panel de administración</div><h1 id="titulo">Biblioteca Clínica</h1></div>
+    <div class="row"><a class="btn ghost" href="/" target="_blank" rel="noopener">Ver la página ↗</a><button class="btn ghost" type="button" id="salir" hidden>Salir</button></div>
+  </div>
+
+  <form class="box pad login" id="login" hidden>
+    <label for="pw">Contraseña de administrador</label>
+    <div class="row"><input id="pw" type="password" autocomplete="current-password" required style="flex:1;min-width:180px"><button class="btn" type="submit">Entrar</button></div>
+    <p class="msg" id="lmsg" role="status"></p>
+  </form>
+
+  <div id="app" hidden>
+    <form class="box pad sitio" id="fsitio" autocomplete="off">
+      <div><label for="snombre">Nombre de la página</label><input id="snombre" maxlength="60" required></div>
+      <div><label for="slema">Frase de presentación</label><input id="slema" maxlength="200"></div>
+      <button class="btn ghost" type="submit">Guardar nombre</button>
+    </form>
+
+    <div class="layout">
+      <section class="box" aria-label="Láminas">
+        <div class="head"><span>Láminas</span><span id="n"></span></div>
+        <ul class="list" id="list"></ul>
+        <button class="btn ghost nuevo" type="button" id="nuevo">+ Nueva lámina</button>
+      </section>
+
+      <section class="box" aria-label="Editar lámina">
+        <div class="head"><span id="wtitle">Nueva lámina</span><span class="msg" id="pend" role="status"></span></div>
+        <div class="pad form">
+          <form class="fields" id="f" autocomplete="off">
+            <div><label for="nombre">Título</label><input id="nombre" required maxlength="90"></div>
+            <div><label for="desc">Descripción</label><textarea id="desc" maxlength="320"></textarea></div>
+            <div class="two">
+              <div><label for="cat">Área</label><input id="cat" list="cats" maxlength="40" placeholder="Anatomía, Farmacología…"><datalist id="cats"></datalist></div>
+              <div><label for="formato">Formato</label><input id="formato" list="formatos" maxlength="40" placeholder="Atlas, Diapositivas…"><datalist id="formatos"><option value="Atlas interactivo"><option value="Diapositivas"><option value="Videoteca"><option value="Autoevaluación"><option value="Resumen"><option value="Flashcards"></datalist></div>
+            </div>
+            <div class="two">
+              <div><label for="url">Enlace</label><input id="url" type="url" placeholder="https://…"></div>
+              <div><label for="estado">Estado</label><select id="estado"><option value="live">Disponible</option><option value="dev">En preparación</option></select></div>
+            </div>
+            <div><span class="lbl">Ícono</span><div class="pick" id="pLogo" role="group" aria-label="Ícono"></div></div>
+            <div><span class="lbl">Color</span><div class="pick" id="pColor" role="group" aria-label="Color"></div></div>
+            <div><span class="lbl">Portada</span><div class="pick" id="pScene" role="group" aria-label="Portada"></div></div>
+            <div class="row">
+              <button class="btn" type="submit" id="guardar">Guardar</button>
+              <button class="btn ghost del" type="button" id="borrar" hidden>Eliminar</button>
+              <span class="msg" id="msg" role="status"></span>
+            </div>
+          </form>
+          <div><span class="lbl">Vista previa</span><div class="box prev" id="prev" style="overflow:hidden"></div>
+            <p class="msg" style="margin-top:14px"><button class="btn ghost" type="button" id="descargar">Descargar copia de respaldo</button></p></div>
+        </div>
+      </section>
+    </div>
+  </div>
+</main>
+
+<script src="comun.js"></script>
+<script>
+const $ = id => document.getElementById(id), E = MED.esc, API = '/api/proyectos';
+const CAMPOS = ['nombre','desc','cat','formato','url','estado'];
+let datos = [], sitio = {nombre:'Biblioteca Clínica', lema:''}, actual = null, borrarListo = false, clave = '', ocupado = false;
+const vacio = () => ({nombre:'', desc:'', cat:'', formato:'', url:'', estado:'live', logo:'libro', color:'arterial', portada:'lamina'});
+let sel = vacio();
+
+/* ---------- servidor ---------- */
+async function cargarServidor(){
+  let lista = null, s = null;
+  try { const r = await fetch(API, {cache:'no-store'}); if (r.ok){ const j = await r.json(); lista = j.proyectos; s = j.sitio; } } catch(e) {}
+  if (!Array.isArray(lista)){
+    const r = await fetch('proyectos.json', {cache:'no-store'});
+    if (r.ok){ const j = await r.json(); lista = j.proyectos; s = s || j.sitio; }
+  }
+  return {lista: Array.isArray(lista) ? lista : [], sitio: s};
+}
+async function publicar(texto){
+  if (ocupado) return false;
+  ocupado = true; $('pend').className = 'msg'; $('pend').textContent = 'Publicando…';
+  datos.forEach((d, k) => d.orden = k);
+  try {
+    const r = await fetch(API, {method:'PUT', headers:{'Content-Type':'application/json','x-admin-password':clave}, body: JSON.stringify({proyectos: datos, sitio})});
+    const j = await r.json().catch(() => ({}));
+    if (r.status === 401){ salir('La sesión expiró. Vuelve a ingresar la contraseña.'); return false; }
+    if (!r.ok) throw new Error(j.error || 'revisa tu conexión.');
+    $('pend').textContent = texto + ' Publicado.';
+    return true;
+  } catch(e){ $('pend').className = 'msg err'; $('pend').textContent = 'No se pudo publicar: ' + e.message; return false; }
+  finally { ocupado = false; }
+}
+
+/* ---------- editor ---------- */
+function picker(el, opciones, campo, render, clase){
+  el.innerHTML = '';
+  Object.entries(opciones).forEach(([k, v]) => {
+    const b = document.createElement('button'); b.type = 'button'; b.dataset.k = k;
+    b.title = typeof v === 'string' ? v : v.n; if (clase) b.className = clase;
+    b.innerHTML = render(k, v);
+    b.onclick = () => { sel[campo] = k; marcar(); vista(); };
+    el.appendChild(b);
+  });
+}
+function marcar(){ [['pLogo','logo'],['pColor','color'],['pScene','portada']].forEach(([id,c]) => $(id).querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', b.dataset.k === sel[c]))); }
+function leerForm(){ CAMPOS.forEach(k => sel[k] = $(k).value.trim()); }
+function vista(){
+  leerForm();
+  $('prev').className = 'box prev c-' + sel.color;
+  $('prev').innerHTML = `<div class="cover">${MED.portada(sel.portada, sel.color, sel.logo, actual || 'nuevo', sel.cat)}</div>
+    <div class="body"><div class="meta">${MED.icono(sel.logo, sel.color, 28)}<b>${E(sel.cat || 'Área')}</b>${sel.formato ? ' · ' + E(sel.formato) : ''}</div>
+    <h3>${E(sel.nombre || 'Título de la lámina')}</h3><p>${E(sel.desc || 'Descripción breve del recurso.')}</p></div>`;
+}
+function cargar(id){
+  actual = id; borrarListo = false; $('borrar').classList.remove('sure'); $('borrar').textContent = 'Eliminar';
+  const d = datos.find(x => x.id === id);
+  sel = d ? {...vacio(), ...d} : vacio();
+  CAMPOS.forEach(k => $(k).value = sel[k] || '');
+  $('borrar').hidden = !d; $('wtitle').textContent = d ? 'Editar lámina' : 'Nueva lámina'; $('msg').textContent = '';
+  marcar(); vista(); lista();
+}
+function lista(){
+  $('n').textContent = datos.length;
+  $('list').innerHTML = datos.map((d, i) => `<li><div class="item" role="button" tabindex="0" data-id="${E(d.id)}" aria-current="${d.id === actual}">
+      ${MED.icono(d.logo, d.color, 34)}<span class="t">${E(d.nombre)}<small>${E(d.cat || '—')} · ${d.estado === 'dev' ? 'en preparación' : 'disponible'}</small></span>
+      <span class="arrows"><button type="button" data-mv="-1" data-i="${i}" aria-label="Subir">▲</button><button type="button" data-mv="1" data-i="${i}" aria-label="Bajar">▼</button></span></div></li>`).join('');
+  $('cats').innerHTML = [...new Set(datos.map(d => d.cat).filter(Boolean))].map(c => `<option value="${E(c)}">`).join('');
+}
+function slug(t){ let b = t.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/[^a-z0-9]+/g,'-').replace(/^-|-$/g,'') || 'lamina', id = b, n = 2;
+  while (datos.some(d => d.id === id)) id = b + '-' + n++; return id; }
+
+$('list').addEventListener('click', async e => {
+  const mv = e.target.closest('[data-mv]');
+  if (mv){
+    e.stopPropagation();
+    const i = +mv.dataset.i, j = i + +mv.dataset.mv; if (j < 0 || j >= datos.length || ocupado) return;
+    const antes = datos.slice(); [datos[i], datos[j]] = [datos[j], datos[i]]; lista();
+    if (!await publicar('Orden guardado.')){ datos = antes; lista(); }
+    return;
+  }
+  const it = e.target.closest('.item'); if (it) cargar(it.dataset.id);
+});
+$('list').addEventListener('keydown', e => { const it = e.target.closest('.item'); if (it && (e.key === 'Enter' || e.key === ' ')){ e.preventDefault(); cargar(it.dataset.id); } });
+CAMPOS.forEach(k => $(k).addEventListener('input', vista));
+$('nuevo').onclick = () => cargar(null);
+
+$('f').addEventListener('submit', async e => {
+  e.preventDefault(); leerForm();
+  if (!sel.nombre){ $('msg').textContent = 'Escribe un título.'; return; }
+  if (sel.url && !/^https?:\/\//i.test(sel.url)){ $('msg').textContent = 'El enlace debe empezar con https://'; return; }
+  const doc = {nombre:sel.nombre, desc:sel.desc, cat:sel.cat, formato:sel.formato, url:sel.url, estado:sel.estado, logo:sel.logo, color:sel.color, portada:sel.portada};
+  const antes = datos.map(d => ({...d})), eraNuevo = !actual;
+  if (actual){ const k = datos.findIndex(d => d.id === actual); datos[k] = {...datos[k], ...doc}; }
+  else { actual = slug(sel.nombre); datos.push({id: actual, ...doc}); }
+  $('guardar').disabled = true; $('msg').textContent = 'Guardando…';
+  if (await publicar('Guardado.')){ $('msg').textContent = 'Guardado ✓'; $('borrar').hidden = false; $('wtitle').textContent = 'Editar lámina'; }
+  else { datos = antes; if (eraNuevo) actual = null; $('msg').textContent = 'No se guardó.'; }
+  $('guardar').disabled = false; lista();
+});
+$('borrar').onclick = async () => {
+  if (!actual) return;
+  if (!borrarListo){ borrarListo = true; $('borrar').classList.add('sure'); $('borrar').textContent = '¿Seguro? Clic de nuevo'; return; }
+  const antes = datos.slice(); datos = datos.filter(d => d.id !== actual);
+  if (await publicar('Eliminada.')) cargar(null); else { datos = antes; lista(); }
+};
+$('fsitio').addEventListener('submit', async e => {
+  e.preventDefault();
+  const antes = {...sitio};
+  sitio = {nombre: $('snombre').value.trim() || 'Biblioteca Clínica', lema: $('slema').value.trim()};
+  if (await publicar('Nombre guardado.')) $('titulo').textContent = sitio.nombre; else sitio = antes;
+});
+$('descargar').onclick = () => {
+  const blob = new Blob([JSON.stringify({sitio, proyectos: datos}, null, 2)], {type:'application/json'});
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'proyectos.json';
+  document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+};
+
+/* ---------- acceso ---------- */
+function salir(motivo){
+  clave = ''; try { sessionStorage.removeItem('med-clave'); } catch(e) {}
+  $('app').hidden = true; $('salir').hidden = true; $('login').hidden = false;
+  $('lmsg').textContent = motivo || ''; $('pw').value = ''; $('pw').focus();
+}
+async function entrar(pw){
+  $('lmsg').textContent = 'Verificando…';
+  let r;
+  try { r = await fetch(API + '?check', {headers:{'x-admin-password': pw}, cache:'no-store'}); }
+  catch(e){ $('lmsg').textContent = 'Sin conexión con el servidor.'; return; }
+  if (r.status === 401){ salir('Contraseña incorrecta.'); return; }
+  if (!r.ok){ const j = await r.json().catch(() => ({})); $('lmsg').textContent = j.error || 'El servidor no respondió. ¿Ya configuraste la base de datos?'; return; }
+  clave = pw; try { sessionStorage.setItem('med-clave', pw); } catch(e) {}
+  const s = await cargarServidor().catch(() => ({lista: [], sitio: null}));
+  datos = s.lista.sort((a, b) => (a.orden ?? 0) - (b.orden ?? 0));
+  if (s.sitio) sitio = {...sitio, ...s.sitio};
+  $('snombre').value = sitio.nombre || ''; $('slema').value = sitio.lema || ''; $('titulo').textContent = sitio.nombre;
+  $('login').hidden = true; $('app').hidden = false; $('salir').hidden = false;
+  $('pend').textContent = 'Los cambios se publican al guardar.';
+  cargar(null);
+}
+$('login').addEventListener('submit', e => { e.preventDefault(); entrar($('pw').value); });
+$('salir').onclick = () => salir('Sesión cerrada.');
+
+picker($('pLogo'), MED.ICONOS, 'logo', k => MED.icono(k, 'venoso', 34));
+picker($('pColor'), MED.COLORES, 'color', k => `<span class="sw c-${k}"></span>`);
+picker($('pScene'), MED.PORTADAS, 'portada', (k, v) => `<span class="c-venoso" style="display:contents">${MED.portada(k, 'venoso', 'corazon', 'muestra')}</span>${E(v)}`, 'esc');
+
+(() => {
+  let guardada = ''; try { guardada = sessionStorage.getItem('med-clave') || ''; } catch(e) {}
+  if (guardada) entrar(guardada); else salir();
+})();
+</script>
+</body>
+</html>

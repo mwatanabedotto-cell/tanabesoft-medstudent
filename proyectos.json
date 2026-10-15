@@ -1,0 +1,34 @@
+{
+  "sitio": {
+    "nombre": "Biblioteca Clínica",
+    "lema": "Atlas interactivos, clases y recursos para estudiar medicina."
+  },
+  "proyectos": [
+    {
+      "id": "atlas-aorta",
+      "nombre": "Atlas de la Aorta",
+      "desc": "Recorrido, ramas, territorios de irrigación y relaciones de cada segmento de la aorta, con niveles vertebrales clave y autoevaluación.",
+      "cat": "Anatomía",
+      "formato": "Atlas interactivo",
+      "url": "https://claude.ai/artifact/GzfNgBRjK5viankjZTy8gC",
+      "estado": "live",
+      "logo": "aorta",
+      "color": "arterial",
+      "portada": "lamina",
+      "orden": 0
+    },
+    {
+      "id": "la-aorta",
+      "nombre": "La Aorta",
+      "desc": "Clase en diapositivas sobre las porciones de la aorta, sus ramas y correlaciones clínicas.",
+      "cat": "Anatomía",
+      "formato": "Diapositivas",
+      "url": "https://claude.ai/artifact/Txw9FDpGNQ3pja4nhSNDEe",
+      "estado": "live",
+      "logo": "diapositivas",
+      "color": "arterial",
+      "portada": "corte",
+      "orden": 1
+    }
+  ]
+}

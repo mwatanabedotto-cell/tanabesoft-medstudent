@@ -1,0 +1,46 @@
+/* Layout: biblioteca tipo atlas — cada página es una "lámina" numerada; índice por área como pestañas de libro */
+:root{
+  --bg:#edf1f3; --sheet:#ffffff; --plate:#f7f9fa; --ink:#10212e; --muted:#566874; --rule:#d2dce2;
+  --accent:#b3202a; --on-accent:#ffffff; --ok:#1d7a52; --ok-bg:#dff1e8; --dev:#8a5a00; --dev-bg:#fbefd0; --bad:#b3202a;
+  --display:"Source Serif 4",Georgia,"Times New Roman",serif;
+  --body:"Public Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0b141a; --sheet:#111e26; --plate:#0e1a21; --ink:#e4edf1; --muted:#93a6b1; --rule:#22343f;
+    --accent:#ff6b6b; --on-accent:#1a0405; --ok:#6fd3a0; --ok-bg:#12301f; --dev:#f0c46a; --dev-bg:#33290f; --bad:#ff6b6b; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0b141a; --sheet:#111e26; --plate:#0e1a21; --ink:#e4edf1; --muted:#93a6b1; --rule:#22343f;
+  --accent:#ff6b6b; --on-accent:#1a0405; --ok:#6fd3a0; --ok-bg:#12301f; --dev:#f0c46a; --dev-bg:#33290f; --bad:#ff6b6b; color-scheme:dark;
+}
+/* colores de tejido */
+.c-arterial{--c:#b3202a} .c-venoso{--c:#2457a6} .c-linfatico{--c:#17806a}
+.c-nervio{--c:#b07800} .c-hueso{--c:#7a6c55} .c-mucosa{--c:#b13f73}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) :is(.c-arterial){--c:#ff7b7b}:root:not([data-theme="light"]) .c-venoso{--c:#7fa8ff}:root:not([data-theme="light"]) .c-linfatico{--c:#5fd4b3}:root:not([data-theme="light"]) .c-nervio{--c:#f2c14e}:root:not([data-theme="light"]) .c-hueso{--c:#cbbd9f}:root:not([data-theme="light"]) .c-mucosa{--c:#f08bbd}}
+:root[data-theme="dark"] .c-arterial{--c:#ff7b7b}:root[data-theme="dark"] .c-venoso{--c:#7fa8ff}:root[data-theme="dark"] .c-linfatico{--c:#5fd4b3}:root[data-theme="dark"] .c-nervio{--c:#f2c14e}:root[data-theme="dark"] .c-hueso{--c:#cbbd9f}:root[data-theme="dark"] .c-mucosa{--c:#f08bbd}
+
+*{box-sizing:border-box}
+html{background:var(--bg)}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.55;
+  padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+img{max-width:100%}[hidden]{display:none!important}
+a{color:inherit}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.wrap{max-width:1120px;margin:0 auto;padding-inline:20px;padding-block:36px 56px}
+.eyebrow{font-family:var(--mono);font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--accent)}
+.med-ico{display:inline-grid;place-items:center;border-radius:12px;background:var(--sheet);border:1.5px solid var(--c);color:var(--c);flex:none}
+.med-ico svg{width:62%;height:62%;stroke:var(--c)}
+.med-cover{display:block;width:100%;height:100%}
+.btn{display:inline-flex;align-items:center;gap:6px;font:inherit;font-weight:600;font-size:14px;text-decoration:none;padding:9px 16px;border-radius:8px;
+  background:var(--accent);color:var(--on-accent);border:1px solid var(--accent);cursor:pointer}
+.btn:hover{filter:brightness(1.08)}
+.btn.ghost{background:transparent;color:var(--ink);border-color:var(--rule)}
+.btn.ghost:hover{border-color:var(--ink)}
+.btn:disabled{opacity:.5;cursor:default}
+.state{display:inline-block;font-family:var(--mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;padding:2px 8px;border-radius:999px}
+.state.live{background:var(--ok-bg);color:var(--ok)}
+.state.dev{background:var(--dev-bg);color:var(--dev)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}

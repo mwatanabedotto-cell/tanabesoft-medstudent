@@ -1,0 +1,12 @@
+BIBLIOTECA CLÍNICA — configuración en Vercel (una sola vez)
+
+1. Crea un repositorio nuevo en GitHub y sube TODO el contenido de esta carpeta
+   (incluida la carpeta "api").
+2. En Vercel: Add New > Project > importa ese repositorio > Deploy.
+3. Storage > Connect Database > elige tu base Upstash existente (la de The Vapor Boy)
+   y conéctala también a este proyecto. Los datos no se mezclan: esta página usa
+   sus propias claves (med:...).
+4. Settings > Environment Variables > Add > ADMIN_PASSWORD = tu contraseña.
+5. Deployments > ⋯ > Redeploy.
+
+Panel: tu-sitio.vercel.app/admin
