@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Panel de la Biblioteca</title>
+<title>Panel · Los Apuntes de Tanabe</title>
 <meta name="robots" content="noindex,nofollow">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -61,7 +61,7 @@ input:focus,textarea:focus,select:focus{outline:none;border-color:var(--accent)}
 <body>
 <main class="wrap">
   <div class="top">
-    <div><div class="eyebrow">Panel de administración</div><h1 id="titulo">Biblioteca Clínica</h1></div>
+    <div><div class="eyebrow">Panel de administración</div><h1 id="titulo">Los Apuntes de Tanabe</h1></div>
     <div class="row"><a class="btn ghost" href="/" target="_blank" rel="noopener">Ver la página ↗</a><button class="btn ghost" type="button" id="salir" hidden>Salir</button></div>
   </div>
 
@@ -120,7 +120,7 @@ input:focus,textarea:focus,select:focus{outline:none;border-color:var(--accent)}
 <script>
 const $ = id => document.getElementById(id), E = MED.esc, API = '/api/proyectos';
 const CAMPOS = ['nombre','desc','cat','formato','url','estado'];
-let datos = [], sitio = {nombre:'Biblioteca Clínica', lema:''}, actual = null, borrarListo = false, clave = '', ocupado = false;
+let datos = [], sitio = {nombre:'Los Apuntes de Tanabe', lema:''}, actual = null, borrarListo = false, clave = '', ocupado = false;
 const vacio = () => ({nombre:'', desc:'', cat:'', formato:'', url:'', estado:'live', logo:'libro', color:'arterial', portada:'lamina'});
 let sel = vacio();
 
@@ -224,7 +224,7 @@ $('borrar').onclick = async () => {
 $('fsitio').addEventListener('submit', async e => {
   e.preventDefault();
   const antes = {...sitio};
-  sitio = {nombre: $('snombre').value.trim() || 'Biblioteca Clínica', lema: $('slema').value.trim()};
+  sitio = {nombre: $('snombre').value.trim() || 'Los Apuntes de Tanabe', lema: $('slema').value.trim()};
   if (await publicar('Nombre guardado.')) $('titulo').textContent = sitio.nombre; else sitio = antes;
 });
 $('descargar').onclick = () => {
