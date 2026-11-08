@@ -7,60 +7,89 @@
 <meta name="description" content="Atlas interactivos, clases y recursos para estudiar medicina.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=Public+Sans:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Patrick+Hand&display=swap">
 <link rel="stylesheet" href="estilo.css">
 <style>
-header{display:grid;grid-template-columns:1fr auto;gap:24px;align-items:end;padding-bottom:26px;border-bottom:1px solid var(--rule)}
-h1{font-family:var(--display);font-weight:600;font-size:clamp(34px,6vw,58px);line-height:1.04;letter-spacing:-.01em;margin:8px 0 12px;text-wrap:balance}
-.lema{margin:0;max-width:60ch;color:var(--muted);font-size:17px}
-.ficha{font-family:var(--mono);font-size:12px;color:var(--muted);text-align:right;line-height:1.9;font-variant-numeric:tabular-nums}
-.ficha b{color:var(--ink);font-weight:500;font-size:20px;display:block;line-height:1.1}
-@media (max-width:600px){header{grid-template-columns:1fr}.ficha{text-align:left;display:flex;gap:24px}}
-/* índice tipo pestañas de libro */
-.indice{display:flex;flex-wrap:wrap;gap:6px;margin:26px 0 24px}
-.tab{font:inherit;font-size:14px;padding:7px 14px 6px;border:1px solid var(--rule);border-bottom-width:3px;border-radius:8px 8px 4px 4px;background:var(--sheet);color:var(--muted);cursor:pointer}
-.tab:hover{color:var(--ink)}
-.tab[aria-pressed="true"]{color:var(--ink);border-bottom-color:var(--accent);font-weight:600}
-.tab small{font-family:var(--mono);font-size:11px;margin-left:6px;opacity:.7}
-/* láminas */
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));gap:22px}
-.lam{background:var(--sheet);border:1px solid var(--rule);border-radius:10px;overflow:hidden;display:flex;flex-direction:column;min-width:0;transition:border-color .15s,transform .15s}
-.lam:hover{border-color:var(--muted);transform:translateY(-2px)}
-.cover{position:relative;aspect-ratio:2/1;max-width:100%;border-bottom:1px solid var(--rule)}
-.num{position:absolute;top:10px;left:12px;font-family:var(--mono);font-size:11px;letter-spacing:.1em;color:var(--muted);background:var(--sheet);padding:2px 7px;border-radius:4px;border:1px solid var(--rule)}
-.body{padding:18px 20px 20px;display:flex;flex-direction:column;gap:10px;flex:1}
-.meta{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--muted)}
-.meta .area{font-weight:600}
-.meta .formato{font-family:var(--mono);font-size:11px;letter-spacing:.05em;text-transform:uppercase}
-.lam h2{font-family:var(--display);font-weight:600;font-size:23px;line-height:1.2;margin:0;text-wrap:balance}
-.lam p{margin:0;color:var(--muted);font-size:15px;flex:1}
-.pie{display:flex;justify-content:space-between;align-items:center;gap:10px;padding-top:12px;border-top:1px dashed var(--rule)}
-.pie .soon{font-size:13px;color:var(--muted);font-style:italic}
-.vacio{border:1px dashed var(--rule);border-radius:10px;padding:40px 20px;text-align:center;color:var(--muted)}
-footer{margin-top:48px;padding-top:18px;border-top:1px solid var(--rule);font-size:13px;color:var(--muted);display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px}
-footer span{font-family:var(--mono)}
+.mesa{padding-inline:16px;padding-block:28px 48px}
+/* la hoja */
+.hoja{position:relative;max-width:1120px;margin:0 auto;background-color:var(--paper);
+  background-image:
+    linear-gradient(90deg,transparent 0 calc(var(--m) - 1px),var(--margin) calc(var(--m) - 1px) calc(var(--m) + 1px),transparent calc(var(--m) + 1px)),
+    repeating-linear-gradient(180deg,transparent 0 calc(var(--renglon) - 1px),var(--line) calc(var(--renglon) - 1px) var(--renglon));
+  background-position:0 0,0 118px;
+  --m:84px; padding:118px 40px 56px calc(var(--m) + 28px);
+  border-radius:4px 10px 10px 4px;box-shadow:0 1px 0 var(--rule),0 18px 40px -22px rgba(0,0,0,.45)}
+/* agujeros del cuaderno */
+.hoja::before{content:"";position:absolute;left:22px;top:24px;bottom:24px;width:22px;
+  background:radial-gradient(circle at 11px 11px,var(--hole) 0 9px,transparent 10px) 0 0/22px 64px repeat-y}
+/* marcadores de página (áreas) */
+.marcadores{position:absolute;top:-4px;right:32px;display:flex;gap:8px;align-items:flex-start;max-width:calc(100% - var(--m) - 60px);flex-wrap:wrap;justify-content:flex-end}
+.cinta{position:relative;font-family:var(--body);font-size:17px;line-height:1.15;color:var(--on-c);background:var(--c);border:0;cursor:pointer;
+  padding:16px 12px 26px;min-width:58px;max-width:140px;text-align:center;
+  clip-path:polygon(0 0,100% 0,100% 100%,50% calc(100% - 12px),0 100%);
+  transform:translateY(-22px);transition:transform .2s;box-shadow:inset 0 6px 6px -6px rgba(0,0,0,.4)}
+.cinta:hover{transform:translateY(-12px)}
+.cinta[aria-pressed="true"]{transform:translateY(0)}
+.cinta small{display:block;font-size:14px;opacity:.85}
+/* encabezado escrito */
+.titulo{margin:0;font-family:var(--display);font-weight:700;font-size:clamp(46px,8vw,84px);line-height:1;color:var(--ink);text-wrap:balance;transform:rotate(-1.2deg);transform-origin:left}
+.lema{margin:14px 0 0;max-width:58ch;font-size:21px;line-height:var(--renglon);color:var(--muted)}
+.fecha{display:flex;flex-wrap:wrap;gap:6px 28px;margin-top:10px;font-size:19px;line-height:var(--renglon);color:var(--muted)}
+.fecha b{font-family:var(--display);font-size:28px;color:var(--accent);font-weight:700}
+/* subtítulos subrayados a mano */
+.subrayado{display:inline;padding-bottom:4px;background-repeat:no-repeat;background-size:100% 10px;background-position:0 100%;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 10' preserveAspectRatio='none'%3E%3Cpath d='M2 6 C 40 2, 80 9, 120 5 S 180 3, 198 6' fill='none' stroke='%23c62f3a' stroke-width='2.4' stroke-linecap='round'/%3E%3C/svg%3E")}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .subrayado{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 10' preserveAspectRatio='none'%3E%3Cpath d='M2 6 C 40 2, 80 9, 120 5 S 180 3, 198 6' fill='none' stroke='%23ff8a80' stroke-width='2.4' stroke-linecap='round'/%3E%3C/svg%3E")}}
+:root[data-theme="dark"] .subrayado{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 10' preserveAspectRatio='none'%3E%3Cpath d='M2 6 C 40 2, 80 9, 120 5 S 180 3, 198 6' fill='none' stroke='%23ff8a80' stroke-width='2.4' stroke-linecap='round'/%3E%3C/svg%3E")}
+.seccion{margin:46px 0 26px;font-family:var(--display);font-weight:700;font-size:38px;line-height:1}
+/* fichas pegadas */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:40px 30px}
+.ficha{position:relative;background:var(--card);padding:18px 18px 16px;display:flex;flex-direction:column;gap:10px;min-width:0;
+  box-shadow:0 1px 2px rgba(0,0,0,.12),0 10px 22px -14px rgba(0,0,0,.45);transform:rotate(var(--r,0deg));transition:transform .2s}
+.ficha:hover{transform:rotate(0deg) translateY(-3px)}
+.ficha:nth-child(3n+1){--r:-.8deg}.ficha:nth-child(3n+2){--r:.6deg}.ficha:nth-child(3n){--r:-.3deg}
+.ficha::before{content:"";position:absolute;top:-13px;left:50%;width:96px;height:26px;margin-left:-48px;background:var(--tape);transform:rotate(-3deg);
+  clip-path:polygon(3% 0,97% 4%,100% 50%,96% 100%,2% 96%,0 50%)}
+.marca{position:absolute;top:-6px;right:16px;background:var(--c);color:var(--on-c);font-size:15px;line-height:1.1;padding:10px 9px 18px;max-width:46%;text-align:center;
+  clip-path:polygon(0 0,100% 0,100% 100%,50% calc(100% - 9px),0 100%)}
+.dibujo{aspect-ratio:2/1;max-width:100%;border:1.5px dashed var(--rule);border-radius:3px;overflow:hidden;margin-top:6px}
+.ficha h2{margin:4px 0 0;font-family:var(--display);font-weight:700;font-size:32px;line-height:1.1;text-wrap:balance}
+.formato{font-size:16px;color:var(--muted);margin-top:-2px}
+.ficha p{margin:0;color:var(--ink);font-size:18px;line-height:1.45;flex:1;opacity:.9}
+.pie{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;padding-top:10px;border-top:1.5px dashed var(--rule)}
+.soon{color:var(--muted);font-size:17px}
+.vacio{font-size:21px;line-height:var(--renglon);color:var(--muted)}
+.firma{margin-top:56px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px 20px;font-size:17px;line-height:var(--renglon);color:var(--muted)}
+@media (max-width:700px){
+  .hoja{--m:40px;padding:104px 18px 40px calc(var(--m) + 14px)}
+  .hoja::before{left:8px;width:18px;background:radial-gradient(circle at 9px 9px,var(--hole) 0 7px,transparent 8px) 0 0/18px 56px repeat-y}
+  .marcadores{right:12px;left:calc(var(--m) + 6px);max-width:none;justify-content:flex-start}
+  .cinta{min-width:0;padding:12px 9px 20px;font-size:15px}
+  .grid{grid-template-columns:1fr}
+}
 </style>
 </head>
 <body>
-<main class="wrap">
-  <header>
-    <div>
-      <div class="eyebrow">Recursos de estudio · Medicina</div>
-      <h1 id="nombre">Los Apuntes de Tanabe</h1>
+<div class="mesa">
+  <main class="hoja">
+    <nav class="marcadores" id="marcadores" aria-label="Filtrar por área"></nav>
+    <header>
+      <div class="eyebrow">Cuaderno de estudio · Medicina</div>
+      <h1 class="titulo" id="nombre">Los Apuntes de Tanabe</h1>
       <p class="lema" id="lema">Atlas interactivos, clases y recursos para estudiar medicina.</p>
-    </div>
-    <div class="ficha" id="ficha"></div>
-  </header>
+      <div class="fecha" id="fecha"></div>
+    </header>
 
-  <nav class="indice" id="indice" aria-label="Filtrar por área"></nav>
-  <div class="grid" id="grid"></div>
-  <div class="vacio" id="vacio">Cargando láminas…</div>
+    <h2 class="seccion"><span class="subrayado" id="seccion">Índice</span></h2>
+    <div class="grid" id="grid"></div>
+    <p class="vacio" id="vacio">Abriendo el cuaderno…</p>
 
-  <footer>
-    <span id="pie">© 2026 Los Apuntes de Tanabe</span>
-    <span>Material de estudio · no reemplaza la bibliografía oficial</span>
-  </footer>
-</main>
+    <footer class="firma">
+      <span id="pie">© 2026 Los Apuntes de Tanabe</span>
+      <span>Material de estudio · no reemplaza la bibliografía oficial</span>
+    </footer>
+  </main>
+</div>
 
 <script src="comun.js"></script>
 <script>
@@ -70,33 +99,34 @@ try { area = localStorage.getItem('med-area') || 'Todas'; } catch(e) {}
 const pad = n => String(n).padStart(2, '0');
 
 function dibujar(){
-  const conteo = {};
-  datos.forEach(d => { const a = d.cat || 'General'; conteo[a] = (conteo[a] || 0) + 1; });
+  const conteo = {}, colorDe = {};
+  datos.forEach(d => { const a = d.cat || 'General'; conteo[a] = (conteo[a] || 0) + 1; if (!colorDe[a]) colorDe[a] = d.color || 'arterial'; });
   const areas = ['Todas', ...Object.keys(conteo)];
   if (!areas.includes(area)) area = 'Todas';
-  $('indice').innerHTML = '';
-  if (datos.length > 1) areas.forEach(a => {
-    const b = document.createElement('button'); b.type = 'button'; b.className = 'tab';
+  $('marcadores').innerHTML = '';
+  if (datos.length) areas.forEach(a => {
+    const b = document.createElement('button'); b.type = 'button';
+    b.className = 'cinta ' + (a === 'Todas' ? 'c-tinta' : 'c-' + colorDe[a]);
     b.setAttribute('aria-pressed', a === area);
     b.innerHTML = `${E(a)}<small>${a === 'Todas' ? datos.length : conteo[a]}</small>`;
     b.onclick = () => { area = a; try { localStorage.setItem('med-area', a); } catch(e) {} dibujar(); };
-    $('indice').appendChild(b);
+    $('marcadores').appendChild(b);
   });
-  $('ficha').innerHTML = datos.length ? `<div><b>${pad(datos.length)}</b>láminas</div><div><b>${pad(Object.keys(conteo).length)}</b>áreas</div>` : '';
+  $('fecha').innerHTML = datos.length ? `<span><b>${datos.length}</b> apuntes</span><span><b>${Object.keys(conteo).length}</b> ${Object.keys(conteo).length === 1 ? 'materia' : 'materias'}</span>` : '';
+  $('seccion').textContent = area === 'Todas' ? 'Índice' : area;
   const lista = datos.map((d, i) => ({...d, n: i + 1})).filter(d => area === 'Todas' || (d.cat || 'General') === area);
   $('grid').innerHTML = lista.map(d => `
-    <article class="lam c-${E(d.color || 'arterial')}">
-      <div class="cover">${MED.portada(d.portada || 'lamina', d.color, d.logo, d.id, d.cat)}<span class="num">LÁM. ${pad(d.n)}</span></div>
-      <div class="body">
-        <div class="meta">${MED.icono(d.logo, d.color, 34)}<span class="area">${E(d.cat || 'General')}</span>${d.formato ? `<span class="formato">· ${E(d.formato)}</span>` : ''}</div>
-        <h2>${E(d.nombre)}</h2>
-        <p>${E(d.desc)}</p>
-        <div class="pie"><span class="state ${d.estado === 'dev' ? 'dev' : 'live'}">${d.estado === 'dev' ? 'En preparación' : 'Disponible'}</span>
-          ${d.url ? `<a class="btn" href="${E(d.url)}" target="_blank" rel="noopener">Abrir lámina →</a>` : '<span class="soon">Próximamente</span>'}</div>
-      </div>
+    <article class="ficha c-${E(d.color || 'arterial')}">
+      <span class="marca">${E(d.cat || 'General')}</span>
+      <div class="dibujo">${MED.portada(d.portada || 'lamina', d.color, d.logo, d.id, '')}</div>
+      <h2><span class="subrayado">${E(d.nombre)}</span></h2>
+      ${d.formato ? `<div class="formato">— ${E(d.formato)} · p. ${pad(d.n)}</div>` : `<div class="formato">p. ${pad(d.n)}</div>`}
+      <p>${E(d.desc)}</p>
+      <div class="pie"><span class="state ${d.estado === 'dev' ? 'dev' : 'live'}">${d.estado === 'dev' ? 'En preparación' : 'Listo para estudiar'}</span>
+        ${d.url ? `<a class="btn" href="${E(d.url)}" target="_blank" rel="noopener">Abrir apunte →</a>` : '<span class="soon">Pronto…</span>'}</div>
     </article>`).join('');
   $('vacio').hidden = datos.length > 0;
-  if (!datos.length) $('vacio').textContent = 'Todavía no hay láminas publicadas.';
+  if (!datos.length) $('vacio').textContent = 'Todavía no hay apuntes en este cuaderno.';
 }
 
 (async () => {
@@ -109,7 +139,7 @@ function dibujar(){
     if (sitio.nombre){ $('nombre').textContent = sitio.nombre; document.title = sitio.nombre; $('pie').textContent = '© 2026 ' + sitio.nombre; }
     if (sitio.lema) $('lema').textContent = sitio.lema;
   }
-  if (!Array.isArray(lista)){ $('vacio').textContent = 'No se pudieron cargar las láminas. Recarga la página.'; return; }
+  if (!Array.isArray(lista)){ $('vacio').textContent = 'No se pudo abrir el cuaderno. Recarga la página.'; return; }
   datos = lista.sort((a, b) => (a.orden ?? 0) - (b.orden ?? 0));
   dibujar();
 })();
