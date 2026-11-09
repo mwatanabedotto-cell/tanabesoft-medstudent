@@ -1,0 +1,318 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Mis notas · Los Apuntes de Tanabe</title>
+<meta name="robots" content="noindex">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Patrick+Hand&display=swap">
+<script>try{var t=localStorage.getItem('med-tema');if(t==='light'||t==='dark')document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
+<link rel="stylesheet" href="estilo.css">
+<style>
+.mesa{padding-inline:16px;padding-block:28px 48px}
+.hoja{position:relative;max-width:1120px;margin:0 auto;background-color:var(--paper);
+  background-image:
+    linear-gradient(90deg,transparent 0 calc(var(--m) - 1px),var(--margin) calc(var(--m) - 1px) calc(var(--m) + 1px),transparent calc(var(--m) + 1px)),
+    repeating-linear-gradient(180deg,transparent 0 calc(var(--renglon) - 1px),var(--line) calc(var(--renglon) - 1px) var(--renglon));
+  background-position:0 0,0 118px;
+  --m:84px; padding:118px 40px 56px calc(var(--m) + 28px);
+  border-radius:4px 10px 10px 4px;box-shadow:0 1px 0 var(--rule),0 18px 40px -22px rgba(0,0,0,.45)}
+.hoja::before{content:"";position:absolute;left:22px;top:24px;bottom:24px;width:22px;
+  background:radial-gradient(circle at 11px 11px,var(--hole) 0 9px,transparent 10px) 0 0/22px 64px repeat-y}
+.hoja .tema{position:absolute;top:22px;left:calc(var(--m) + 24px)}
+.volver{position:absolute;top:26px;right:32px;display:flex;gap:10px;flex-wrap:wrap;justify-content:flex-end}
+.titulo{margin:0;font-family:var(--display);font-weight:700;font-size:clamp(40px,7vw,72px);line-height:1;color:var(--ink);text-wrap:balance;transform:rotate(-1.2deg);transform-origin:left}
+.lema{margin:14px 0 0;max-width:58ch;font-size:21px;line-height:var(--renglon);color:var(--muted)}
+.fecha{display:flex;flex-wrap:wrap;gap:6px 28px;margin-top:10px;font-size:19px;line-height:var(--renglon);color:var(--muted)}
+.fecha b{font-family:var(--display);font-size:28px;color:var(--accent);font-weight:700}
+.subrayado{display:inline;padding-bottom:4px;background-repeat:no-repeat;background-size:100% 10px;background-position:0 100%;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 10' preserveAspectRatio='none'%3E%3Cpath d='M2 6 C 40 2, 80 9, 120 5 S 180 3, 198 6' fill='none' stroke='%23c62f3a' stroke-width='2.4' stroke-linecap='round'/%3E%3C/svg%3E")}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]) .subrayado{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 10' preserveAspectRatio='none'%3E%3Cpath d='M2 6 C 40 2, 80 9, 120 5 S 180 3, 198 6' fill='none' stroke='%23ff8a80' stroke-width='2.4' stroke-linecap='round'/%3E%3C/svg%3E")}}
+:root[data-theme="dark"] .subrayado{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 10' preserveAspectRatio='none'%3E%3Cpath d='M2 6 C 40 2, 80 9, 120 5 S 180 3, 198 6' fill='none' stroke='%23ff8a80' stroke-width='2.4' stroke-linecap='round'/%3E%3C/svg%3E")}
+.seccion{margin:46px 0 22px;font-family:var(--display);font-weight:700;font-size:38px;line-height:1}
+/* entrar */
+.login{margin:40px 0;max-width:420px;display:flex;flex-direction:column;gap:12px}
+.login label{font-size:18px;color:var(--muted)}
+input[type=password],input[type=search],select,textarea{font-family:var(--body);font-size:19px;color:var(--ink);background:var(--card);
+  border:1.8px solid var(--rule);border-radius:255px 15px 225px 15px/15px 225px 15px 255px;padding:8px 14px;width:100%}
+select,textarea{border-radius:6px}
+.aviso{min-height:28px;font-size:18px;color:var(--accent)}
+/* barra de herramientas */
+.barra{display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-bottom:18px}
+.barra input[type=search]{max-width:320px}
+.chips{display:flex;gap:8px;flex-wrap:wrap}
+.chip{font-family:var(--body);font-size:17px;padding:4px 13px;cursor:pointer;background:transparent;color:var(--muted);
+  border:1.8px solid var(--rule);border-radius:255px 15px 225px 15px/15px 225px 15px 255px}
+.chip[aria-pressed="true"]{color:var(--on-accent);background:var(--accent);border-color:var(--accent)}
+/* fichas */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:40px 30px}
+.ficha{position:relative;background:var(--card);padding:18px;display:flex;flex-direction:column;gap:9px;min-width:0;text-align:left;
+  border:0;font-family:var(--body);font-size:19px;color:var(--ink);cursor:pointer;
+  box-shadow:0 1px 2px rgba(0,0,0,.12),0 10px 22px -14px rgba(0,0,0,.45);transform:rotate(var(--r,0deg));transition:transform .2s}
+.ficha:hover{transform:rotate(0deg) translateY(-3px)}
+.ficha:nth-child(3n+1){--r:-.8deg}.ficha:nth-child(3n+2){--r:.6deg}.ficha:nth-child(3n){--r:-.3deg}
+.ficha::before{content:"";position:absolute;top:-13px;left:50%;width:96px;height:26px;margin-left:-48px;background:var(--tape);transform:rotate(-3deg);
+  clip-path:polygon(3% 0,97% 4%,100% 50%,96% 100%,2% 96%,0 50%)}
+.marca{position:absolute;top:-6px;right:16px;background:var(--c);color:var(--on-c);font-size:15px;line-height:1.1;padding:10px 9px 18px;max-width:46%;text-align:center;
+  clip-path:polygon(0 0,100% 0,100% 100%,50% calc(100% - 9px),0 100%)}
+.ficha h3{margin:6px 0 0;font-family:var(--display);font-weight:700;font-size:30px;line-height:1.1;text-wrap:balance;padding-right:46px}
+.formato{font-size:16px;color:var(--muted);margin-top:-2px}
+.prev{margin:0;font-size:17px;line-height:1.45;color:var(--ink);opacity:.85;white-space:pre-wrap;overflow-wrap:anywhere}
+.prev.sin{color:var(--muted);font-style:italic;opacity:1}
+.pie{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;padding-top:10px;border-top:1.5px dashed var(--rule);font-size:16px;color:var(--muted);width:100%}
+/* estados de estudio */
+.est{display:inline-flex;align-items:center;gap:6px;font-size:17px;color:var(--e,var(--muted))}
+.est::before{content:"";width:13px;height:13px;border-radius:50%;background:var(--e,var(--muted));flex:none}
+.e-pendiente{--e:var(--muted)} .e-estudiando{--e:var(--dev)} .e-repasar{--e:var(--accent)} .e-dominado{--e:var(--ok)}
+/* página del apunte */
+.detalle{max-width:780px}
+.meta{display:flex;gap:8px 22px;flex-wrap:wrap;font-size:17px;color:var(--muted);margin:6px 0 18px}
+.fila{display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-bottom:14px}
+.fila label{font-size:18px;color:var(--muted)}
+.fila select{width:auto;min-width:170px}
+textarea{min-height:calc(var(--renglon) * 9);line-height:var(--renglon);padding:6px 12px;resize:vertical;
+  background-color:var(--card);
+  background-image:repeating-linear-gradient(180deg,transparent 0 calc(var(--renglon) - 1px),var(--line) calc(var(--renglon) - 1px) var(--renglon));
+  background-position:0 5px}
+.guardado{font-size:17px;color:var(--muted);min-height:28px}
+.guardado.ok{color:var(--ok)} .guardado.error{color:var(--bad)}
+.vacio{font-size:21px;line-height:var(--renglon);color:var(--muted)}
+.firma{margin-top:56px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:8px 20px;font-size:17px;line-height:var(--renglon);color:var(--muted)}
+@media (max-width:700px){
+  .hoja{--m:40px;padding:150px 18px 40px calc(var(--m) + 14px)}
+  .hoja::before{left:8px;width:18px;background:radial-gradient(circle at 9px 9px,var(--hole) 0 7px,transparent 8px) 0 0/18px 56px repeat-y}
+  .hoja .tema{left:auto;right:12px;top:14px}
+  .volver{top:70px;right:18px;left:calc(var(--m) + 6px);justify-content:flex-start}
+  .grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<div class="mesa">
+  <main class="hoja">
+    <button class="tema" type="button" id="tema" aria-label="Cambiar a modo noche"></button>
+    <div class="volver">
+      <a class="btn ghost" href="/">Ver el cuaderno ↗</a>
+      <a class="btn ghost" href="/admin">Panel</a>
+      <button class="btn ghost" type="button" id="salir" hidden>Salir</button>
+    </div>
+
+    <header>
+      <div class="eyebrow">Cuaderno de estudio · Privado</div>
+      <h1 class="titulo">Mis notas</h1>
+      <p class="lema">Tus apuntes y tu avance, guardados en el cuaderno y disponibles desde cualquier dispositivo.</p>
+      <div class="fecha" id="fecha"></div>
+    </header>
+
+    <form class="login" id="login" hidden>
+      <label for="clave">Contraseña de administrador</label>
+      <input type="password" id="clave" autocomplete="current-password" required>
+      <div><button class="btn primary" type="submit">Entrar</button></div>
+      <p class="aviso" id="avisoLogin"></p>
+    </form>
+
+    <section id="indice" hidden>
+      <h2 class="seccion"><span class="subrayado">Índice de estudio</span></h2>
+      <div class="barra">
+        <input type="search" id="buscar" placeholder="Buscar por título, área o nota…" aria-label="Buscar">
+        <div class="chips" id="filtros"></div>
+      </div>
+      <div class="grid" id="grid"></div>
+      <p class="vacio" id="vacio" hidden></p>
+    </section>
+
+    <section id="detalle" class="detalle" hidden>
+      <h2 class="seccion"><span class="subrayado" id="dTitulo"></span></h2>
+      <div class="meta" id="dMeta"></div>
+      <div class="fila">
+        <label for="dEstado">Avance:</label>
+        <select id="dEstado">
+          <option value="pendiente">Pendiente</option>
+          <option value="estudiando">Estudiando</option>
+          <option value="repasar">Para repasar</option>
+          <option value="dominado">Dominado</option>
+        </select>
+        <button class="btn ghost" type="button" id="dVolver">← Volver al índice</button>
+        <a class="btn" id="dAbrir" target="_blank" rel="noopener" hidden>Abrir apunte →</a>
+      </div>
+      <label class="lema" for="dNotas" style="margin:0 0 6px;font-size:18px">Mis notas de este apunte</label>
+      <textarea id="dNotas" placeholder="Escribe aquí lo que quieras recordar…" spellcheck="true"></textarea>
+      <div class="fila" style="margin-top:12px">
+        <button class="btn primary" type="button" id="dGuardar">Guardar</button>
+        <span class="guardado" id="dAviso"></span>
+      </div>
+    </section>
+
+    <footer class="firma">
+      <span id="pie">© 2026 Los Apuntes de Tanabe</span>
+      <span>Notas privadas · solo visibles con tu contraseña</span>
+    </footer>
+  </main>
+</div>
+
+<script src="comun.js"></script>
+<script>
+MED.tema(document.getElementById('tema'));
+const $ = id => document.getElementById(id), E = MED.esc;
+const ETIQUETA = {pendiente:'Pendiente', estudiando:'Estudiando', repasar:'Para repasar', dominado:'Dominado'};
+const API_P = '/api/proyectos', API_N = '/api/notas';
+
+let clave = '', apuntes = [], notas = {}, filtro = 'todos', busca = '';
+let actual = null, timer = null, sucio = false;
+
+/* ---------- sesión ---------- */
+function salir(motivo){
+  clave = ''; try { sessionStorage.removeItem('med-clave'); } catch(e) {}
+  ['indice','detalle','salir'].forEach(i => $(i).hidden = true);
+  $('login').hidden = false;
+  $('avisoLogin').textContent = motivo || '';
+  $('fecha').textContent = '';
+}
+async function entrar(pw){
+  $('avisoLogin').textContent = 'Comprobando…';
+  let r;
+  try { r = await fetch(API_N, {headers:{'x-admin-password': pw}, cache:'no-store'}); }
+  catch(e) { $('avisoLogin').textContent = 'Sin conexión con el servidor.'; return; }
+  if (r.status === 401) { salir('Contraseña incorrecta.'); return; }
+  if (!r.ok) { $('avisoLogin').textContent = 'El servidor respondió con un error (' + r.status + ').'; return; }
+  notas = (await r.json()).notas || {};
+  clave = pw; try { sessionStorage.setItem('med-clave', pw); } catch(e) {}
+  $('login').hidden = true; $('salir').hidden = false; $('avisoLogin').textContent = '';
+  await cargarApuntes();
+  mostrar();
+}
+$('login').onsubmit = e => { e.preventDefault(); entrar($('clave').value); };
+$('salir').onclick = () => { if (!sucio || window.confirm('Tienes cambios sin guardar. ¿Salir igualmente?')) salir('Sesión cerrada.'); };
+
+/* ---------- datos ---------- */
+async function cargarApuntes(){
+  let lista = null, sitio = null;
+  try { const a = await fetch(API_P, {cache:'no-store'}); if (a.ok){ const j = await a.json(); lista = j.proyectos; sitio = j.sitio; } } catch(e) {}
+  if (!Array.isArray(lista)) {
+    try { const r = await fetch('proyectos.json', {cache:'no-store'}); if (r.ok){ const j = await r.json(); lista = j.proyectos; sitio = sitio || j.sitio; } } catch(e) {}
+  }
+  if (sitio && sitio.nombre) { document.title = 'Mis notas · ' + sitio.nombre; $('pie').textContent = '© 2026 ' + sitio.nombre; }
+  apuntes = Array.isArray(lista) ? lista.slice().sort((a,b) => (a.orden ?? 0) - (b.orden ?? 0)) : [];
+}
+async function guardarNota(id, cuerpo){
+  const r = await fetch(API_N, {
+    method: 'PUT',
+    headers: {'Content-Type':'application/json', 'x-admin-password': clave},
+    body: JSON.stringify({id: id, nota: cuerpo})
+  });
+  if (r.status === 401) { salir('La sesión expiró. Vuelve a ingresar la contraseña.'); throw new Error('401'); }
+  if (!r.ok) { const j = await r.json().catch(() => ({})); throw new Error(j.error || ('error ' + r.status)); }
+  const j = await r.json();
+  if (j.nota) notas[id] = j.nota; else delete notas[id];
+}
+
+/* ---------- índice ---------- */
+const nota = id => notas[id] || {estado:'pendiente', notas:'', act:0};
+const norm = s => String(s || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g,'');
+const fechaCorta = ms => ms ? new Date(ms).toLocaleDateString('es-BO', {day:'2-digit', month:'short', year:'numeric'}) : '';
+
+function pintarFiltros(){
+  const cuenta = {todos: apuntes.length, connotas: 0};
+  Object.keys(ETIQUETA).forEach(k => cuenta[k] = 0);
+  apuntes.forEach(a => { const n = nota(a.id); cuenta[n.estado] = (cuenta[n.estado] || 0) + 1; if (n.notas.trim()) cuenta.connotas++; });
+  const opciones = [['todos','Todos'], ['pendiente','Pendiente'], ['estudiando','Estudiando'], ['repasar','Para repasar'], ['dominado','Dominado'], ['connotas','Con notas']];
+  $('filtros').innerHTML = '';
+  opciones.forEach(par => {
+    const b = document.createElement('button');
+    b.type = 'button'; b.className = 'chip'; b.setAttribute('aria-pressed', par[0] === filtro);
+    b.textContent = par[1] + ' (' + (cuenta[par[0]] || 0) + ')';
+    b.onclick = () => { filtro = par[0]; pintarIndice(); };
+    $('filtros').appendChild(b);
+  });
+  $('fecha').innerHTML = '<span><b>' + apuntes.length + '</b> apuntes</span>' +
+    '<span><b>' + cuenta.connotas + '</b> con notas</span>' +
+    '<span><b>' + (cuenta.dominado || 0) + '</b> dominados</span>';
+}
+function pintarIndice(){
+  pintarFiltros();
+  const q = norm(busca);
+  const lista = apuntes.filter(a => {
+    const n = nota(a.id);
+    if (filtro === 'connotas' ? !n.notas.trim() : (filtro !== 'todos' && n.estado !== filtro)) return false;
+    return !q || norm(a.nombre + ' ' + (a.cat || '') + ' ' + (a.formato || '') + ' ' + n.notas).indexOf(q) >= 0;
+  });
+  $('grid').innerHTML = lista.map(a => {
+    const n = nota(a.id), texto = n.notas.trim();
+    return '<button class="ficha c-' + E(a.color || 'arterial') + '" data-id="' + E(a.id) + '" type="button">' +
+      '<span class="marca">' + E(a.cat || 'General') + '</span>' +
+      '<h3>' + E(a.nombre) + '</h3>' +
+      (a.formato ? '<div class="formato">— ' + E(a.formato) + '</div>' : '') +
+      '<p class="prev' + (texto ? '' : ' sin') + '">' + (texto ? E(texto.slice(0, 160)) + (texto.length > 160 ? '…' : '') : 'Sin notas todavía.') + '</p>' +
+      '<span class="pie"><span class="est e-' + n.estado + '">' + ETIQUETA[n.estado] + '</span>' +
+      '<span>' + (n.act ? 'Revisado ' + fechaCorta(n.act) : '') + '</span></span></button>';
+  }).join('');
+  $('grid').querySelectorAll('.ficha').forEach(b => { b.onclick = () => { location.hash = '#' + encodeURIComponent(b.dataset.id); }; });
+  $('vacio').hidden = lista.length > 0;
+  $('vacio').textContent = apuntes.length ? 'Ningún apunte coincide con esta búsqueda.' : 'Todavía no hay apuntes en el cuaderno. Agrégalos desde el panel.';
+}
+$('buscar').oninput = e => { busca = e.target.value; pintarIndice(); };
+
+/* ---------- página de un apunte ---------- */
+function pintarMeta(a, ms){
+  $('dMeta').innerHTML = [a.cat, a.formato, ms ? 'Última vez: ' + fechaCorta(ms) : 'Sin revisar']
+    .filter(Boolean).map(t => '<span>' + E(t) + '</span>').join('');
+}
+function abrirDetalle(a){
+  actual = a;
+  const n = nota(a.id);
+  $('dTitulo').textContent = a.nombre;
+  pintarMeta(a, n.act);
+  $('dEstado').value = n.estado;
+  $('dNotas').value = n.notas;
+  $('dAbrir').hidden = !a.url;
+  if (a.url) $('dAbrir').href = a.url;
+  marcarAviso('', '');
+  sucio = false;
+}
+function marcarAviso(txt, clase){ const e = $('dAviso'); e.textContent = txt; e.className = 'guardado' + (clase ? ' ' + clase : ''); }
+async function guardarActual(){
+  if (!actual) return;
+  clearTimeout(timer);
+  const a = actual, id = a.id;
+  const cuerpo = {estado: $('dEstado').value, notas: $('dNotas').value};
+  marcarAviso('Guardando…', '');
+  try {
+    await guardarNota(id, cuerpo);
+    sucio = false;
+    marcarAviso('Guardado ✓', 'ok');
+    if (actual && actual.id === id) pintarMeta(a, nota(id).act);
+  } catch(e) {
+    if (e.message !== '401') marcarAviso('No se pudo guardar: ' + e.message, 'error');
+  }
+}
+function programar(){ sucio = true; marcarAviso('Sin guardar…', ''); clearTimeout(timer); timer = setTimeout(guardarActual, 1500); }
+$('dNotas').oninput = programar;
+$('dNotas').onblur = () => { if (sucio) guardarActual(); };
+$('dEstado').onchange = guardarActual;
+$('dGuardar').onclick = guardarActual;
+$('dVolver').onclick = () => { location.hash = '#'; };
+document.addEventListener('keydown', e => {
+  if ((e.ctrlKey || e.metaKey) && e.key === 's' && !$('detalle').hidden) { e.preventDefault(); guardarActual(); }
+});
+window.addEventListener('beforeunload', e => { if (sucio) { e.preventDefault(); e.returnValue = ''; } });
+
+/* ---------- navegación ---------- */
+function mostrar(){
+  if (!clave) return;
+  let id = '';
+  try { id = decodeURIComponent(location.hash.slice(1)); } catch(e) { id = ''; }
+  const a = id && apuntes.filter(x => x.id === id)[0];
+  if (a) { $('indice').hidden = true; $('detalle').hidden = false; abrirDetalle(a); window.scrollTo(0, 0); }
+  else { actual = null; sucio = false; $('detalle').hidden = true; $('indice').hidden = false; pintarIndice(); }
+}
+window.addEventListener('hashchange', () => { if (sucio) guardarActual(); mostrar(); });
+
+(async () => {
+  let guardada = ''; try { guardada = sessionStorage.getItem('med-clave') || ''; } catch(e) {}
+  if (guardada) await entrar(guardada); else salir();
+})();
+</script>
+</body>
+</html>
