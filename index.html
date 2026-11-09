@@ -8,6 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Patrick+Hand&display=swap">
+<script>try{var t=localStorage.getItem('med-tema');if(t==='light'||t==='dark')document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
 <link rel="stylesheet" href="estilo.css">
 <style>
 .mesa{padding-inline:16px;padding-block:28px 48px}
@@ -23,6 +24,7 @@
 .hoja::before{content:"";position:absolute;left:22px;top:24px;bottom:24px;width:22px;
   background:radial-gradient(circle at 11px 11px,var(--hole) 0 9px,transparent 10px) 0 0/22px 64px repeat-y}
 /* marcadores de página (áreas) */
+.hoja .tema{position:absolute;top:22px;left:calc(var(--m) + 24px)}
 .marcadores{position:absolute;top:-4px;right:32px;display:flex;gap:8px;align-items:flex-start;max-width:calc(100% - var(--m) - 60px);flex-wrap:wrap;justify-content:flex-end}
 .cinta{position:relative;font-family:var(--body);font-size:17px;line-height:1.15;color:var(--on-c);background:var(--c);border:0;cursor:pointer;
   padding:16px 12px 26px;min-width:58px;max-width:140px;text-align:center;
@@ -63,7 +65,8 @@
 @media (max-width:700px){
   .hoja{--m:40px;padding:104px 18px 40px calc(var(--m) + 14px)}
   .hoja::before{left:8px;width:18px;background:radial-gradient(circle at 9px 9px,var(--hole) 0 7px,transparent 8px) 0 0/18px 56px repeat-y}
-  .marcadores{right:12px;left:calc(var(--m) + 6px);max-width:none;justify-content:flex-start}
+  .marcadores{right:62px;left:calc(var(--m) + 6px);max-width:none;justify-content:flex-start}
+  .hoja .tema{left:auto;right:12px;top:14px}
   .cinta{min-width:0;padding:12px 9px 20px;font-size:15px}
   .grid{grid-template-columns:1fr}
 }
@@ -72,6 +75,7 @@
 <body>
 <div class="mesa">
   <main class="hoja">
+    <button class="tema" type="button" id="tema" aria-label="Cambiar a modo noche"></button>
     <nav class="marcadores" id="marcadores" aria-label="Filtrar por área"></nav>
     <header>
       <div class="eyebrow">Cuaderno de estudio · Medicina</div>
@@ -93,6 +97,7 @@
 
 <script src="comun.js"></script>
 <script>
+MED.tema(document.getElementById('tema'));
 const $ = id => document.getElementById(id), E = MED.esc;
 let datos = [], area = 'Todas';
 try { area = localStorage.getItem('med-area') || 'Todas'; } catch(e) {}

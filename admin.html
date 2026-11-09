@@ -8,6 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Patrick+Hand&display=swap">
+<script>try{var t=localStorage.getItem('med-tema');if(t==='light'||t==='dark')document.documentElement.setAttribute('data-theme',t)}catch(e){}</script>
 <link rel="stylesheet" href="estilo.css">
 <style>
 /* Layout: escritorio de trabajo — índice de láminas a la izquierda, ficha de edición con vista previa a la derecha */
@@ -64,7 +65,7 @@ input:focus,textarea:focus,select:focus{outline:none;border-color:var(--accent)}
 <main class="wrap">
   <div class="top">
     <div><div class="eyebrow">Panel de administración</div><h1 id="titulo">Los Apuntes de Tanabe</h1></div>
-    <div class="row"><a class="btn ghost" href="/" target="_blank" rel="noopener">Ver la página ↗</a><button class="btn ghost" type="button" id="salir" hidden>Salir</button></div>
+    <div class="row"><button class="tema" type="button" id="tema" aria-label="Cambiar a modo noche"></button><a class="btn ghost" href="/" target="_blank" rel="noopener">Ver la página ↗</a><button class="btn ghost" type="button" id="salir" hidden>Salir</button></div>
   </div>
 
   <form class="box pad login" id="login" hidden>
@@ -120,6 +121,7 @@ input:focus,textarea:focus,select:focus{outline:none;border-color:var(--accent)}
 
 <script src="comun.js"></script>
 <script>
+MED.tema(document.getElementById('tema'));
 const $ = id => document.getElementById(id), E = MED.esc, API = '/api/proyectos';
 const CAMPOS = ['nombre','desc','cat','formato','url','estado'];
 let datos = [], sitio = {nombre:'Los Apuntes de Tanabe', lema:''}, actual = null, borrarListo = false, clave = '', ocupado = false;

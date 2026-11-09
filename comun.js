@@ -67,5 +67,27 @@ window.MED = (function(){
       <g transform="translate(46 32) scale(5.6)" style="fill:none;stroke:var(--c)" stroke-width="1.35" stroke-linecap="round" stroke-linejoin="round">${glyph(logo)}</g>
       ${etiqueta}</svg>`;
   }
-  return {ICONOS, COLORES, PORTADAS, icono, portada, esc};
+  /* botón día / noche: recuerda la elección en este navegador */
+  function tema(btn){
+    if (!btn) return;
+    const root = document.documentElement, mq = window.matchMedia ? matchMedia('(prefers-color-scheme: dark)') : null;
+    const actual = () => root.getAttribute('data-theme') || (mq && mq.matches ? 'dark' : 'light');
+    const pintar = () => {
+      const oscuro = actual() === 'dark';
+      btn.innerHTML = oscuro
+        ? '<svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.5v2.6M12 18.9v2.6M2.5 12h2.6M18.9 12h2.6M5.3 5.3l1.8 1.8M16.9 16.9l1.8 1.8M5.3 18.7l1.8-1.8M16.9 7.1l1.8-1.8"/></svg>'
+        : '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5Z"/></svg>';
+      const txt = oscuro ? 'Cambiar a modo día' : 'Cambiar a modo noche';
+      btn.setAttribute('aria-label', txt); btn.title = txt;
+    };
+    btn.addEventListener('click', () => {
+      const nuevo = actual() === 'dark' ? 'light' : 'dark';
+      root.setAttribute('data-theme', nuevo);
+      try { localStorage.setItem('med-tema', nuevo); } catch(e) {}
+      pintar();
+    });
+    if (mq && mq.addEventListener) mq.addEventListener('change', pintar);
+    pintar();
+  }
+  return {ICONOS, COLORES, PORTADAS, icono, portada, esc, tema};
 })();
